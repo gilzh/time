@@ -25,7 +25,25 @@
     gap: 28px;
   }
 
-.side-buttons {
+  .btn-top {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #d4aa50, #8b6914, #7a5c10);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,220,100,0.3);
+    transition: filter 0.15s, transform 0.1s;
+    z-index: 10;
+  }
+  .btn-top:hover { filter: brightness(1.2); }
+  .btn-top:active { transform: translateX(-50%) translateY(2px); }
+
+  .side-buttons {
     position: absolute;
     right: -22px;
     top: 50%;
@@ -211,8 +229,8 @@
 
 <div class="watch-container">
   <div class="watch-outer">
+    <button class="btn-top" id="btnSideStart" title="Start/Stop"></button>
     <div class="side-buttons">
-      <button class="btn-side" id="btnSideStart" title="Start/Stop"></button>
       <button class="btn-side" id="btnSideReset" title="Reset"></button>
     </div>
     <div class="watch-bezel">
