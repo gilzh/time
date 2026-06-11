@@ -27,21 +27,16 @@
 
   .btn-top {
     position: absolute;
-    top: -22px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
     width: 36px;
-    height: 22px;
-    border-radius: 5px 5px 2px 2px;
+    height: 20px;
+    border-radius: 4px 4px 2px 2px;
     background: linear-gradient(to bottom, #c8a96e, #8b6914, #c8a96e, #7a5c10);
     border: none;
     cursor: pointer;
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
-    background-image:
-      linear-gradient(to bottom, #c8a96e, #8b6914, #c8a96e, #7a5c10),
-      repeating-linear-gradient(to right, transparent, transparent 3px, rgba(0,0,0,0.25) 3px, rgba(0,0,0,0.25) 4px);
-    background-blend-mode: multiply;
-    transition: filter 0.15s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
     z-index: 10;
   }
   .btn-top::after {
@@ -56,8 +51,7 @@
     border-radius: 2px;
     pointer-events: none;
   }
-  .btn-top:hover { filter: brightness(1.15); }
-  .btn-top:active { transform: translateX(-50%) translateY(2px); box-shadow: 0 0 4px rgba(0,0,0,0.6); }
+  .btn-top:active { transform: translateX(-50%) translateY(2px); }
 
   .side-buttons {
     position: absolute;
