@@ -352,7 +352,7 @@ function drawMinuteTicks() {
     ctx.stroke();
 
     if (isMajor) {
-      const label = i === 0 ? '60' : String(i);
+      const label = String(i);
       const tr = R - 2 - len - 9;
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
@@ -383,7 +383,7 @@ function drawSecondTicks() {
     ctx.stroke();
 
     if (isMajor) {
-      const label = i === 0 ? '60' : String(i);
+      const label = String(i);
       const tr = r2 - 7;
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
