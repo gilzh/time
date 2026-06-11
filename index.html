@@ -367,7 +367,7 @@ function drawMinuteTicks() {
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
       ctx.fillStyle = '#3a2510';
-      ctx.font = `${isQuarter ? 'bold ' : ''}${isQuarter ? 10 : 8}px Georgia`;
+      ctx.font = `bold ${isQuarter ? 13 : 11}px Georgia`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(label, tx, ty);
