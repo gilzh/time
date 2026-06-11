@@ -295,11 +295,11 @@ function drawDial(ms) {
   drawSecondTicks();
 
   // Minute hand (big) — 0 to 60 min
-  const minAngle = (totalMin % 60) / 60 * Math.PI * 2 - Math.PI / 2;
+  const minAngle = (totalMin % 60) / 60 * Math.PI * 2;
   drawHand(minAngle, R * 0.62, 4, '#2d1a08');
 
   // Second hand (small) — 0 to 60 sec
-  const secAngle = (totalSec % 60) / 60 * Math.PI * 2 - Math.PI / 2;
+  const secAngle = (totalSec % 60) / 60 * Math.PI * 2;
   drawSecondHand(secAngle);
 
   // Center jewel
