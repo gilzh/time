@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vintage Stopwatch</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -10,82 +10,83 @@
   body {
     background: #1a1008;
     background-image: radial-gradient(ellipse at center, #2d1f0e 0%, #0e0804 100%);
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: 'Georgia', serif;
+    overflow: hidden;
   }
 
   .watch-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 32px;
   }
 
+  /* Crown / Start button at top */
   .btn-top {
     position: absolute;
-    top: -20px;
+    top: -28px;
     left: 50%;
     transform: translateX(-50%);
-    width: 36px;
-    height: 20px;
-    border-radius: 4px 4px 2px 2px;
+    width: 52px;
+    height: 28px;
+    border-radius: 6px 6px 3px 3px;
     background: linear-gradient(to bottom, #c8a96e, #8b6914, #c8a96e, #7a5c10);
     border: none;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
     z-index: 10;
   }
   .btn-top::after {
     content: '';
     position: absolute;
-    top: 3px; left: 4px; right: 4px; bottom: 3px;
+    top: 4px; left: 6px; right: 6px; bottom: 4px;
     background: repeating-linear-gradient(
       to right,
-      transparent, transparent 3px,
-      rgba(0,0,0,0.3) 3px, rgba(0,0,0,0.3) 4px
+      transparent, transparent 4px,
+      rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 5px
     );
-    border-radius: 2px;
+    border-radius: 3px;
     pointer-events: none;
   }
-  .btn-top:active { transform: translateX(-50%) translateY(2px); }
+  .btn-top:active { transform: translateX(-50%) translateY(3px); }
 
+  /* Side Reset button */
   .side-buttons {
     position: absolute;
-    right: -22px;
+    right: -30px;
     top: 50%;
     transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
   .btn-side {
-    width: 20px;
-    height: 28px;
+    width: 26px;
+    height: 40px;
     background: linear-gradient(to right, #b8922e, #8b6914, #c8a96e);
-    border-radius: 4px;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.6), inset -1px 0 0 rgba(255,255,255,0.15);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.6), inset -1px 0 0 rgba(255,255,255,0.15);
     transition: transform 0.1s;
   }
-  .btn-side:active { transform: translateX(2px); }
+  .btn-side:active { transform: translateX(3px); }
 
+  /* Outer case */
   .watch-outer {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: 360px;
+    height: 360px;
     border-radius: 50%;
     background: linear-gradient(145deg, #d4aa50 0%, #8b6914 30%, #c8a030 55%, #7a5c10 75%, #b8922e 100%);
     box-shadow:
-      0 0 0 3px #5a4010,
-      0 8px 40px rgba(0,0,0,0.8),
-      0 2px 8px rgba(0,0,0,0.5),
-      inset 0 2px 4px rgba(255,220,100,0.3),
-      inset 0 -2px 4px rgba(0,0,0,0.4);
+      0 0 0 4px #5a4010,
+      0 12px 50px rgba(0,0,0,0.85),
+      0 4px 12px rgba(0,0,0,0.5),
+      inset 0 3px 6px rgba(255,220,100,0.3),
+      inset 0 -3px 6px rgba(0,0,0,0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,37 +94,39 @@
   .watch-outer::before {
     content: '';
     position: absolute;
-    inset: 6px;
+    inset: 8px;
     border-radius: 50%;
-    border: 2px solid rgba(100, 70, 10, 0.8);
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+    border: 3px solid rgba(100, 70, 10, 0.8);
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
   }
 
+  /* Inner bezel */
   .watch-bezel {
     position: relative;
-    width: 262px;
-    height: 262px;
+    width: 314px;
+    height: 314px;
     border-radius: 50%;
     background: linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #0e0804 100%);
     box-shadow:
-      inset 0 4px 12px rgba(0,0,0,0.9),
-      inset 0 -2px 6px rgba(0,0,0,0.6),
-      0 0 0 2px #5a4010;
+      inset 0 6px 16px rgba(0,0,0,0.9),
+      inset 0 -3px 8px rgba(0,0,0,0.6),
+      0 0 0 3px #5a4010;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
 
+  /* Dial face */
   .watch-face {
     position: relative;
-    width: 240px;
-    height: 240px;
+    width: 290px;
+    height: 290px;
     border-radius: 50%;
     background:
       radial-gradient(ellipse at 40% 35%, rgba(255,245,220,0.08) 0%, transparent 60%),
       radial-gradient(ellipse at center, #f5edd8 0%, #e8d9b8 40%, #d4c090 70%, #c8aa70 100%);
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), inset 0 -1px 4px rgba(0,0,0,0.2);
+    box-shadow: inset 0 3px 10px rgba(0,0,0,0.3), inset 0 -2px 6px rgba(0,0,0,0.2);
     overflow: hidden;
   }
   .watch-face::before {
@@ -141,51 +144,55 @@
     border-radius: 50%;
   }
 
+  /* Digital readout */
   .digital-display {
     position: absolute;
-    bottom: 62px;
+    bottom: 68px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(20, 12, 4, 0.85);
-    border: 1px solid #8b6914;
-    border-radius: 4px;
-    padding: 3px 10px;
+    background: rgba(20, 12, 4, 0.88);
+    border: 1.5px solid #8b6914;
+    border-radius: 6px;
+    padding: 5px 14px;
     color: #d4aa50;
     font-family: 'Courier New', monospace;
-    font-size: 13px;
-    letter-spacing: 1px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
     white-space: nowrap;
     z-index: 10;
   }
 
+  /* Brand */
   .brand {
     position: absolute;
-    top: 68px;
+    top: 76px;
     width: 100%;
     text-align: center;
-    font-size: 11px;
-    letter-spacing: 4px;
+    font-size: 14px;
+    letter-spacing: 6px;
     color: #8b6914;
     font-family: 'Georgia', serif;
     text-transform: uppercase;
     z-index: 10;
   }
 
+  /* Bottom controls */
   .controls {
     display: flex;
-    gap: 24px;
+    gap: 32px;
     align-items: center;
   }
 
   .btn {
-    width: 80px;
-    height: 40px;
-    border-radius: 20px;
+    width: 110px;
+    height: 54px;
+    border-radius: 27px;
     border: none;
     cursor: pointer;
     font-family: 'Georgia', serif;
-    font-size: 13px;
+    font-size: 18px;
     letter-spacing: 1px;
     transition: all 0.15s;
   }
@@ -193,46 +200,43 @@
   .btn-start {
     background: linear-gradient(to bottom, #c8a96e, #8b6914, #7a5c10);
     color: #fff8e8;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,100,0.3);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 5px 16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,100,0.3);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
-  .btn-start:hover { filter: brightness(1.15); transform: translateY(-1px); }
-  .btn-start:active { transform: translateY(1px); }
+  .btn-start:active { transform: translateY(2px); }
 
   .btn-reset {
     background: linear-gradient(to bottom, #5a4535, #2d1f0e, #1a1008);
     color: #c8a96e;
-    border: 1px solid #8b6914;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,180,50,0.1);
+    border: 1.5px solid #8b6914;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,180,50,0.1);
   }
-  .btn-reset:hover { filter: brightness(1.2); transform: translateY(-1px); }
-  .btn-reset:active { transform: translateY(1px); }
+  .btn-reset:active { transform: translateY(2px); }
 
   /* Time limit input */
   .limit-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     color: #8b6914;
-    font-size: 12px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
   }
   .limit-input {
-    width: 52px;
-    height: 32px;
+    width: 70px;
+    height: 44px;
     background: rgba(20, 12, 4, 0.9);
-    border: 1px solid #8b6914;
-    border-radius: 4px;
+    border: 1.5px solid #8b6914;
+    border-radius: 6px;
     color: #d4aa50;
     font-family: 'Courier New', monospace;
-    font-size: 16px;
+    font-size: 22px;
     text-align: center;
     outline: none;
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.8);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
   }
   .limit-input:focus { border-color: #c8a96e; }
-  .limit-input::placeholder { color: #5a4010; font-size: 12px; }
-  .limit-label { text-transform: uppercase; letter-spacing: 2px; font-size: 11px; }
+  .limit-input::placeholder { color: #5a4010; font-size: 14px; }
+  .limit-label { text-transform: uppercase; letter-spacing: 3px; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -245,7 +249,7 @@
     </div>
     <div class="watch-bezel">
       <div class="watch-face">
-        <canvas id="dialCanvas" width="240" height="240"></canvas>
+        <canvas id="dialCanvas" width="290" height="290"></canvas>
         <div class="brand">Tempus &middot; Co.</div>
         <div class="digital-display" id="digitalDisplay">00:00</div>
       </div>
@@ -259,7 +263,7 @@
 
   <div class="limit-row">
     <span class="limit-label">Limit</span>
-    <input class="limit-input" id="limitInput" type="number" min="1" max="60" placeholder="min" />
+    <input class="limit-input" id="limitInput" type="number" min="1" max="60" placeholder="—" />
     <span class="limit-label">min</span>
   </div>
 </div>
@@ -267,13 +271,13 @@
 <script>
 const canvas = document.getElementById('dialCanvas');
 const ctx = canvas.getContext('2d');
-const CX = 120, CY = 120, R = 110;
+const CX = 145, CY = 145, R = 133;
 
 let startTime = null;
 let elapsed = 0;
 let running = false;
 let animFrame = null;
-let limitMin = null; // user-set time limit in minutes
+let limitMin = null;
 
 document.getElementById('limitInput').addEventListener('input', function() {
   const v = parseInt(this.value);
@@ -288,67 +292,57 @@ function formatTime(ms) {
 }
 
 function drawDial(ms) {
-  ctx.clearRect(0, 0, 240, 240);
+  ctx.clearRect(0, 0, 290, 290);
 
   const totalMin = ms / 60000;
   const totalSec = ms / 1000;
 
-  // Draw the limit marker arc segment before ticks (so ticks render on top)
-  if (limitMin !== null) {
-    drawLimitMarker(limitMin);
-  }
+  if (limitMin !== null) drawLimitMarker(limitMin);
 
-  // Outer tick ring — 60 divisions for minutes
   drawMinuteTicks();
-
-  // Inner tick ring — 60 divisions for seconds (smaller, closer to center)
   drawSecondTicks();
 
-  // Minute hand (big) — 0 to 60 min
+  // Minute hand (big)
   const minAngle = (totalMin % 60) / 60 * Math.PI * 2;
-  drawHand(minAngle, R * 0.62, 4, '#2d1a08');
+  drawHand(minAngle, R * 0.62, 5, '#2d1a08');
 
-  // Second hand (small) — 0 to 60 sec
+  // Second hand (small, red)
   const secAngle = (totalSec % 60) / 60 * Math.PI * 2;
   drawSecondHand(secAngle);
 
   // Center jewel
-  ctx.beginPath(); ctx.arc(CX, CY, 5, 0, Math.PI * 2);
+  ctx.beginPath(); ctx.arc(CX, CY, 7, 0, Math.PI * 2);
   ctx.fillStyle = '#c8a96e'; ctx.fill();
-  ctx.beginPath(); ctx.arc(CX, CY, 3, 0, Math.PI * 2);
+  ctx.beginPath(); ctx.arc(CX, CY, 4.5, 0, Math.PI * 2);
   ctx.fillStyle = '#8b6914'; ctx.fill();
-  ctx.beginPath(); ctx.arc(CX, CY, 1.5, 0, Math.PI * 2);
+  ctx.beginPath(); ctx.arc(CX, CY, 2, 0, Math.PI * 2);
   ctx.fillStyle = '#ffd060'; ctx.fill();
 }
 
 function drawLimitMarker(min) {
   const angle = (min / 60) * Math.PI * 2 - Math.PI / 2;
-  const arcSpan = (1.5 / 60) * Math.PI * 2; // highlight ~1.5-minute wide wedge
+  const arcSpan = (1.5 / 60) * Math.PI * 2;
 
-  // Red arc on the outer track
   ctx.beginPath();
   ctx.arc(CX, CY, R - 5, angle - arcSpan / 2, angle + arcSpan / 2);
-  ctx.arc(CX, CY, R - 16, angle + arcSpan / 2, angle - arcSpan / 2, true);
+  ctx.arc(CX, CY, R - 20, angle + arcSpan / 2, angle - arcSpan / 2, true);
   ctx.closePath();
   ctx.fillStyle = 'rgba(200, 40, 20, 0.85)';
   ctx.fill();
 
-  // Red dot at exact mark
-  const mx = CX + Math.cos(angle) * (R - 10);
-  const my = CY + Math.sin(angle) * (R - 10);
-  ctx.beginPath();
-  ctx.arc(mx, my, 3.5, 0, Math.PI * 2);
-  ctx.fillStyle = '#e83020';
-  ctx.fill();
+  const mx = CX + Math.cos(angle) * (R - 12);
+  const my = CY + Math.sin(angle) * (R - 12);
+  ctx.beginPath(); ctx.arc(mx, my, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#e83020'; ctx.fill();
 }
 
 function drawMinuteTicks() {
-  // 60 ticks, major every 5
   for (let i = 0; i < 60; i++) {
     const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
     const isMajor = i % 5 === 0;
     const isQuarter = i % 15 === 0;
-    const len = isQuarter ? 14 : (isMajor ? 10 : 5);
+    const len = isQuarter ? 18 : (isMajor ? 13 : 7);
+
     const x1 = CX + Math.cos(angle) * (R - 2);
     const y1 = CY + Math.sin(angle) * (R - 2);
     const x2 = CX + Math.cos(angle) * (R - 2 - len);
@@ -358,27 +352,25 @@ function drawMinuteTicks() {
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.strokeStyle = isMajor ? '#3a2510' : '#9a8050';
-    ctx.lineWidth = isQuarter ? 2 : (isMajor ? 1.5 : 0.8);
+    ctx.lineWidth = isQuarter ? 3 : (isMajor ? 2 : 1);
     ctx.stroke();
 
     if (isMajor) {
-      const label = String(i);
-      const tr = R - 2 - len - 9;
+      const tr = R - 2 - len - 13;
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
-      ctx.fillStyle = '#3a2510';
-      ctx.font = `bold ${isQuarter ? 13 : 11}px Georgia`;
+      ctx.fillStyle = '#2a1808';
+      ctx.font = `bold ${isQuarter ? 18 : 15}px Georgia`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(label, tx, ty);
+      ctx.fillText(String(i), tx, ty);
     }
   }
 }
 
 function drawSecondTicks() {
-  // Small ring of 60 second ticks, drawn on an inner radius
-  const rOuter = R * 0.48;
-  const rInner = R * 0.42;
+  const rOuter = R * 0.50;
+  const rInner = R * 0.43;
   for (let i = 0; i < 60; i++) {
     const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
     const isMajor = i % 5 === 0;
@@ -389,19 +381,18 @@ function drawSecondTicks() {
     ctx.moveTo(CX + Math.cos(angle) * r1, CY + Math.sin(angle) * r1);
     ctx.lineTo(CX + Math.cos(angle) * r2, CY + Math.sin(angle) * r2);
     ctx.strokeStyle = isMajor ? '#5a3a18' : '#b89860';
-    ctx.lineWidth = isMajor ? 1.2 : 0.6;
+    ctx.lineWidth = isMajor ? 1.5 : 0.8;
     ctx.stroke();
 
     if (isMajor) {
-      const label = String(i);
-      const tr = r2 - 7;
+      const tr = r2 - 9;
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
       ctx.fillStyle = '#5a3a18';
-      ctx.font = '6px Georgia';
+      ctx.font = 'bold 8px Georgia';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(label, tx, ty);
+      ctx.fillText(String(i), tx, ty);
     }
   }
 }
@@ -410,15 +401,15 @@ function drawHand(angle, length, width, color) {
   ctx.save();
   ctx.translate(CX, CY);
   ctx.rotate(angle);
-  ctx.shadowColor = 'rgba(0,0,0,0.4)';
-  ctx.shadowBlur = 4;
-  ctx.shadowOffsetY = 2;
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 6;
+  ctx.shadowOffsetY = 3;
   ctx.beginPath();
-  ctx.moveTo(-width / 2, 10);
+  ctx.moveTo(-width / 2, 12);
   ctx.lineTo(-width / 2 * 0.6, -length * 0.85);
   ctx.lineTo(0, -length);
   ctx.lineTo(width / 2 * 0.6, -length * 0.85);
-  ctx.lineTo(width / 2, 10);
+  ctx.lineTo(width / 2, 12);
   ctx.closePath();
   ctx.fillStyle = color;
   ctx.fill();
@@ -429,19 +420,17 @@ function drawSecondHand(angle) {
   ctx.save();
   ctx.translate(CX, CY);
   ctx.rotate(angle);
-  ctx.shadowColor = 'rgba(0,0,0,0.4)';
-  ctx.shadowBlur = 3;
-  // Counterweight
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 4;
   ctx.beginPath();
-  ctx.moveTo(-1.5, 8); ctx.lineTo(-1.5, 20); ctx.lineTo(1.5, 20); ctx.lineTo(1.5, 8);
+  ctx.moveTo(-2, 10); ctx.lineTo(-2, 26); ctx.lineTo(2, 26); ctx.lineTo(2, 10);
   ctx.closePath();
   ctx.fillStyle = '#c8503c'; ctx.fill();
-  // Shaft — reaches only to inner second ring
   ctx.beginPath();
-  ctx.moveTo(-1, 8);
-  ctx.lineTo(-1, -(R * 0.44));
-  ctx.lineTo(1, -(R * 0.44));
-  ctx.lineTo(1, 8);
+  ctx.moveTo(-1.5, 10);
+  ctx.lineTo(-1.5, -(R * 0.44));
+  ctx.lineTo(1.5, -(R * 0.44));
+  ctx.lineTo(1.5, 10);
   ctx.closePath();
   ctx.fillStyle = '#c8503c'; ctx.fill();
   ctx.restore();
