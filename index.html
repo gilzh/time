@@ -241,6 +241,65 @@
     opacity: 0.7;
   }
   .footer-link:hover { opacity: 1; color: #8b6914; }
+
+  .clock-watch-outer {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #d4aa50 0%, #8b6914 30%, #c8a030 55%, #7a5c10 75%, #b8922e 100%);
+    box-shadow:
+      0 0 0 4px #5a4010,
+      0 12px 50px rgba(0,0,0,0.85),
+      0 4px 12px rgba(0,0,0,0.5),
+      inset 0 3px 6px rgba(255,220,100,0.3),
+      inset 0 -3px 6px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .clock-watch-outer::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 3px solid rgba(100, 70, 10, 0.8);
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  }
+  .clock-bezel {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #0e0804 100%);
+    box-shadow:
+      inset 0 6px 16px rgba(0,0,0,0.9),
+      inset 0 -3px 8px rgba(0,0,0,0.6),
+      0 0 0 3px #5a4010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .clock-face {
+    position: relative;
+    width: 176px;
+    height: 176px;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 40% 35%, rgba(255,245,220,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at center, #f5edd8 0%, #e8d9b8 40%, #d4c090 70%, #c8aa70 100%);
+    box-shadow: inset 0 3px 10px rgba(0,0,0,0.3), inset 0 -2px 6px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  .clock-face::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,200,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -268,6 +327,15 @@
   </div>
 
   <input id="limitInput" type="hidden" value="2" />
+
+  <div class="clock-watch-outer">
+    <div class="clock-bezel">
+      <div class="clock-face">
+        <canvas id="clockCanvas" width="176" height="176"></canvas>
+      </div>
+    </div>
+  </div>
+
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
 </div>
 
@@ -608,6 +676,81 @@ if (document.referrer.includes('minodiaire')) {
 const hashScale = parseInt(window.location.hash.replace('#', ''));
 applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
 tick();
+
+// --- Analog clock ---
+const clockCanvas = document.getElementById('clockCanvas');
+const cc = clockCanvas.getContext('2d');
+const CCX = 88, CCY = 88, CR = 80;
+
+function drawClock() {
+  cc.clearRect(0, 0, 176, 176);
+  const now = new Date();
+  const hr  = now.getHours() % 12 + now.getMinutes() / 60;
+  const min = now.getMinutes() + now.getSeconds() / 60;
+  const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+
+  // Hour ticks & numbers
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+    const bold = true;
+    const len = 14;
+    cc.beginPath();
+    cc.moveTo(CCX + Math.cos(a) * (CR - 2), CCY + Math.sin(a) * (CR - 2));
+    cc.lineTo(CCX + Math.cos(a) * (CR - 2 - len), CCY + Math.sin(a) * (CR - 2 - len));
+    cc.strokeStyle = '#3a2510'; cc.lineWidth = 2.5; cc.stroke();
+    const tr = CR - 2 - len - 9;
+    cc.fillStyle = '#2a1808';
+    cc.font = 'bold 11px Georgia';
+    cc.textAlign = 'center'; cc.textBaseline = 'middle';
+    cc.fillText(String(i === 0 ? 12 : i), CCX + Math.cos(a) * tr, CCY + Math.sin(a) * tr);
+  }
+  // Minute ticks
+  for (let i = 0; i < 60; i++) {
+    if (i % 5 === 0) continue;
+    const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+    cc.beginPath();
+    cc.moveTo(CCX + Math.cos(a) * (CR - 2), CCY + Math.sin(a) * (CR - 2));
+    cc.lineTo(CCX + Math.cos(a) * (CR - 9), CCY + Math.sin(a) * (CR - 9));
+    cc.strokeStyle = '#9a8050'; cc.lineWidth = 0.8; cc.stroke();
+  }
+
+  // Hour hand
+  const hAngle = (hr / 12) * Math.PI * 2 - Math.PI / 2;
+  drawClockHand(hAngle, CR * 0.48, 6, '#1a0e04');
+  // Minute hand
+  const mAngle = (min / 60) * Math.PI * 2 - Math.PI / 2;
+  drawClockHand(mAngle, CR * 0.68, 4, '#1a0e04');
+  // Second hand
+  const sAngle = (sec / 60) * Math.PI * 2 - Math.PI / 2;
+  cc.save(); cc.translate(CCX, CCY); cc.rotate(sAngle);
+  cc.beginPath(); cc.moveTo(-1.2, 10); cc.lineTo(-1.2, -(CR * 0.72)); cc.lineTo(1.2, -(CR * 0.72)); cc.lineTo(1.2, 10);
+  cc.closePath(); cc.fillStyle = '#c8503c'; cc.fill();
+  cc.beginPath(); cc.moveTo(-2, 10); cc.lineTo(-2, 18); cc.lineTo(2, 18); cc.lineTo(2, 10);
+  cc.closePath(); cc.fillStyle = '#c8503c'; cc.fill();
+  cc.restore();
+
+  // Centre jewel
+  cc.beginPath(); cc.arc(CCX, CCY, 5, 0, Math.PI * 2); cc.fillStyle = '#c8a96e'; cc.fill();
+  cc.beginPath(); cc.arc(CCX, CCY, 3, 0, Math.PI * 2); cc.fillStyle = '#8b6914'; cc.fill();
+  cc.beginPath(); cc.arc(CCX, CCY, 1.5, 0, Math.PI * 2); cc.fillStyle = '#ffd060'; cc.fill();
+
+  requestAnimationFrame(drawClock);
+}
+
+function drawClockHand(angle, length, width, color) {
+  cc.save(); cc.translate(CCX, CCY); cc.rotate(angle);
+  cc.shadowColor = 'rgba(0,0,0,0.5)'; cc.shadowBlur = 4; cc.shadowOffsetY = 2;
+  cc.beginPath();
+  cc.moveTo(-width / 2, 8);
+  cc.lineTo(-width / 2 * 0.6, -length * 0.85);
+  cc.lineTo(0, -length);
+  cc.lineTo(width / 2 * 0.6, -length * 0.85);
+  cc.lineTo(width / 2, 8);
+  cc.closePath(); cc.fillStyle = color; cc.fill();
+  cc.restore();
+}
+
+drawClock();
 </script>
 </body>
 </html>
