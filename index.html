@@ -242,30 +242,6 @@
   }
   .btn-reset:active { transform: translateY(2px); }
 
-  /* Time limit input */
-  .limit-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #8b6914;
-    letter-spacing: 2px;
-  }
-  .limit-input {
-    width: 70px;
-    height: 44px;
-    background: rgba(20, 12, 4, 0.9);
-    border: 1.5px solid #8b6914;
-    border-radius: 6px;
-    color: #d4aa50;
-    font-family: 'Courier New', monospace;
-    font-size: 22px;
-    text-align: center;
-    outline: none;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
-  }
-  .limit-input:focus { border-color: #c8a96e; }
-  .limit-input::placeholder { color: #5a4010; font-size: 14px; }
-  .limit-label { text-transform: uppercase; letter-spacing: 3px; font-size: 14px; }
   .footer-link {
     color: #5a4010;
     font-family: 'Georgia', serif;
@@ -301,11 +277,7 @@
     <button class="btn btn-start" id="btnStart">Start</button>
   </div>
 
-  <div class="limit-row">
-    <span class="limit-label">Target</span>
-    <input class="limit-input" id="limitInput" type="number" min="1" max="10" value="3" />
-    <span class="limit-label">min</span>
-  </div>
+  <input id="limitInput" type="hidden" value="3" />
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
 </div>
 
