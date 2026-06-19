@@ -315,9 +315,9 @@ let animFrame = null;
 let limitMin = 2;
 
 const SCALE_CONFIG = {
-  6:  { boldEveryMin: 3,  defaultTarget: 2  },
-  12: { boldEveryMin: 3,  defaultTarget: 3  },
-  60: { boldEveryMin: 15, defaultTarget: 15 },
+  6:  { boldEveryMin: 3,  labelEveryMin: 1,  defaultTarget: 2  },
+  12: { boldEveryMin: 3,  labelEveryMin: 1,  defaultTarget: 3  },
+  60: { boldEveryMin: 15, labelEveryMin: 15, defaultTarget: 15 },
 };
 
 let SCALE = 6;
@@ -401,12 +401,15 @@ function drawLimitMarker(min) {
 }
 
 function drawMinuteTicks() {
+  const cfg = SCALE_CONFIG[SCALE];
   const totalTicks = SCALE * 4;
-  const boldEveryTicks = SCALE_CONFIG[SCALE].boldEveryMin * 4;
+  const boldEveryTicks  = cfg.boldEveryMin  * 4;
+  const labelEveryTicks = cfg.labelEveryMin * 4;
   for (let i = 0; i < totalTicks; i++) {
     const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
-    const isMin  = i % 4 === 0;
-    const isBold = i % boldEveryTicks === 0;
+    const isMin   = i % 4 === 0;
+    const isBold  = i % boldEveryTicks  === 0;
+    const isLabel = i % labelEveryTicks === 0;
     const len = isBold ? 20 : (isMin ? 14 : 7);
     const lw  = isBold ? 3  : (isMin ? 2  : 1);
 
@@ -419,7 +422,7 @@ function drawMinuteTicks() {
     ctx.strokeStyle = isMin ? '#3a2510' : '#9a8050';
     ctx.lineWidth = lw; ctx.stroke();
 
-    if (isMin) {
+    if (isLabel) {
       const minLabel = i / 4;
       const tr = R - 2 - len - 13;
       const tx = CX + Math.cos(angle) * tr;
