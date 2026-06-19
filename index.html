@@ -509,8 +509,22 @@ function reset() {
   document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
-document.getElementById('btnSideStart').addEventListener('click', startStop);
-document.getElementById('btnSideReset').addEventListener('click', reset);
+function playClick() {
+  const ac = new (window.AudioContext || window.webkitAudioContext)();
+  const buf = ac.createBuffer(1, ac.sampleRate * 0.04, ac.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 8);
+  const src = ac.createBufferSource();
+  src.buffer = buf;
+  const gain = ac.createGain();
+  gain.gain.setValueAtTime(0.35, 0);
+  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.04);
+  src.connect(gain); gain.connect(ac.destination);
+  src.start();
+}
+
+document.getElementById('btnSideStart').addEventListener('click', () => { playClick(); startStop(); });
+document.getElementById('btnSideReset').addEventListener('click', () => { playClick(); reset(); });
 
 // Tap a minute mark on the dial to set Target
 function handleDialTap(e) {
