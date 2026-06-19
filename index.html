@@ -281,7 +281,7 @@
 <body>
 
 <div class="watch-container">
-  <h1 class="page-title">Alicia &amp; Alice Timepiece</h1>
+  <h1 class="page-title" id="pageTitle">Alicia &amp; Alice Timepiece</h1>
   <p class="page-subtitle" id="tagline"></p>
   <div class="watch-outer">
     <button class="btn-top" id="btnSideReset" title="Reset"></button>
@@ -598,6 +598,13 @@ const quotes = [
   "set goals, don't waste your time",
 ];
 
+const path = window.location.pathname;
+if (path.includes('minodiaire')) {
+  document.getElementById('pageTitle').textContent = 'Alicia Timepiece';
+  document.title = 'Alicia Timepiece';
+}
+const hashScale = parseInt(window.location.hash.replace('#', ''));
+ 
 const hashScale = parseInt(window.location.hash.replace('#', ''));
 applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
 tick();
