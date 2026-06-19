@@ -451,7 +451,7 @@ function drawDial(ms) {
 function drawLimitMarker(min) {
   // clamp to scale
   const clamped = Math.min(min, SCALE);
-  const angle = (clamped / SCALE) * Math.PI * 2 - Math.PI / 2;
+  const angle = (clamped / SCALE) * Math.PI * 2;
   const arcSpan = (0.5 / SCALE) * Math.PI * 2;
 
   ctx.beginPath();
@@ -473,7 +473,7 @@ function drawMinuteTicks() {
   const boldEveryTicks  = cfg.boldEveryMin  * cfg.subTicks;
   const labelEveryTicks = cfg.labelEveryMin * cfg.subTicks;
   for (let i = 0; i < totalTicks; i++) {
-    const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
+    const angle = (i / totalTicks) * Math.PI * 2;
     const isMin   = i % cfg.subTicks === 0;
     const isBold  = i % boldEveryTicks  === 0;
     const isLabel = i % labelEveryTicks === 0;
@@ -507,7 +507,7 @@ function drawSecondTicks() {
   const rOuter = R * 0.50;
   const rInner = R * 0.43;
   for (let i = 0; i < 60; i++) {
-    const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
+    const angle = (i / 60) * Math.PI * 2;
     const isMajor = i % 5 === 0;
     const r1 = isMajor ? rOuter : rOuter - 2;
     const r2 = isMajor ? rInner - 2 : rInner + 1;
@@ -722,7 +722,7 @@ function drawClock() {
 
   // Hour ticks & numbers
   for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+    const a = (i / 12) * Math.PI * 2;
     const bold = true;
     const len = 14;
     cc.beginPath();
@@ -738,7 +738,7 @@ function drawClock() {
   // Minute ticks
   for (let i = 0; i < 60; i++) {
     if (i % 5 === 0) continue;
-    const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+    const a = (i / 60) * Math.PI * 2;
     cc.beginPath();
     cc.moveTo(CCX + Math.cos(a) * (CR - 2), CCY + Math.sin(a) * (CR - 2));
     cc.lineTo(CCX + Math.cos(a) * (CR - 9), CCY + Math.sin(a) * (CR - 9));
@@ -746,13 +746,13 @@ function drawClock() {
   }
 
   // Hour hand
-  const hAngle = (hr / 12) * Math.PI * 2 - Math.PI / 2;
+  const hAngle = (hr / 12) * Math.PI * 2;
   drawClockHand(hAngle, CR * 0.48, 6, '#1a0e04');
   // Minute hand
-  const mAngle = (min / 60) * Math.PI * 2 - Math.PI / 2;
+  const mAngle = (min / 60) * Math.PI * 2;
   drawClockHand(mAngle, CR * 0.68, 4, '#1a0e04');
   // Second hand
-  const sAngle = (sec / 60) * Math.PI * 2 - Math.PI / 2;
+  const sAngle = (sec / 60) * Math.PI * 2;
   cc.save(); cc.translate(CCX, CCY); cc.rotate(sAngle);
   cc.beginPath(); cc.moveTo(-1.2, 10); cc.lineTo(-1.2, -(CR * 0.72)); cc.lineTo(1.2, -(CR * 0.72)); cc.lineTo(1.2, 10);
   cc.closePath(); cc.fillStyle = '#c8503c'; cc.fill();
