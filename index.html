@@ -712,10 +712,15 @@ const CCX = 88, CCY = 88, CR = 80;
 function drawClock() {
   cc.clearRect(0, 0, 176, 176);
   const now = new Date();
-  const paris = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
-  const hr  = paris.getHours() % 12 + paris.getMinutes() / 60;
-  const min = paris.getMinutes() + paris.getSeconds() / 60;
-  const sec = paris.getSeconds() + now.getMilliseconds() / 1000;
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Paris',
+      hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false
+    }).formatToParts(now).filter(x => x.type !== 'literal').map(x => [x.type, parseInt(x.value)])
+  );
+  const hr  = p.hour % 12 + p.minute / 60;
+  const min = p.minute + p.second / 60;
+  const sec = p.second + now.getMilliseconds() / 1000;
 
   // Hour ticks & numbers
   for (let i = 0; i < 12; i++) {
