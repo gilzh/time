@@ -303,7 +303,7 @@
 
   <div class="limit-row">
     <span class="limit-label">Target</span>
-    <input class="limit-input" id="limitInput" type="number" min="1" max="10" placeholder="—" />
+    <input class="limit-input" id="limitInput" type="number" min="1" max="10" value="3" />
     <span class="limit-label">min</span>
   </div>
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
@@ -318,7 +318,7 @@ let startTime = null;
 let elapsed = 0;
 let running = false;
 let animFrame = null;
-let limitMin = null;
+let limitMin = 3;
 
 document.getElementById('limitInput').addEventListener('input', function() {
   const v = parseInt(this.value);
