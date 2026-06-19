@@ -509,22 +509,47 @@ function reset() {
   document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
-function playClick() {
+function playClick(type) {
   const ac = new (window.AudioContext || window.webkitAudioContext)();
-  const buf = ac.createBuffer(1, ac.sampleRate * 0.04, ac.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 8);
-  const src = ac.createBufferSource();
-  src.buffer = buf;
-  const gain = ac.createGain();
-  gain.gain.setValueAtTime(0.35, 0);
-  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.04);
-  src.connect(gain); gain.connect(ac.destination);
-  src.start();
+  if (type === 'reset') {
+    // Two-stage thunk: initial transient + low body
+    [0, 0.045].forEach((delay, i) => {
+      const dur = i === 0 ? 0.07 : 0.12;
+      const buf = ac.createBuffer(1, ac.sampleRate * dur, ac.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let j = 0; j < data.length; j++) data[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / data.length, i === 0 ? 5 : 2);
+      const src = ac.createBufferSource();
+      src.buffer = buf;
+      const gain = ac.createGain();
+      const t = ac.currentTime + delay;
+      gain.gain.setValueAtTime(i === 0 ? 0.4 : 0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      const filter = ac.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = i === 0 ? 4000 : 900;
+      src.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+      src.start(t);
+    });
+  } else {
+    // Short crisp snap
+    const buf = ac.createBuffer(1, ac.sampleRate * 0.03, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 10);
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const gain = ac.createGain();
+    gain.gain.setValueAtTime(0.35, 0);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.03);
+    const filter = ac.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 2000;
+    src.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+    src.start();
+  }
 }
 
-document.getElementById('btnSideStart').addEventListener('click', () => { playClick(); startStop(); });
-document.getElementById('btnSideReset').addEventListener('click', () => { playClick(); reset(); });
+document.getElementById('btnSideStart').addEventListener('click', () => { playClick('start'); startStop(); });
+document.getElementById('btnSideReset').addEventListener('click', () => { playClick('reset'); reset(); });
 
 // Tap a minute mark on the dial to set Target
 function handleDialTap(e) {
