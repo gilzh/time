@@ -303,7 +303,7 @@
 
   <div class="limit-row">
     <span class="limit-label">Target</span>
-    <input class="limit-input" id="limitInput" type="number" min="1" max="60" placeholder="—" />
+    <input class="limit-input" id="limitInput" type="number" min="1" max="20" placeholder="—" />
     <span class="limit-label">min</span>
   </div>
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
@@ -322,7 +322,7 @@ let limitMin = null;
 
 document.getElementById('limitInput').addEventListener('input', function() {
   const v = parseInt(this.value);
-  limitMin = (v >= 1 && v <= 60) ? v : null;
+  limitMin = (v >= 1 && v <= 20) ? v : null;
   drawDial(elapsed);
 });
 
@@ -331,6 +331,8 @@ function formatTime(ms) {
   const m = Math.floor(ms / 60000);
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
+
+const SCALE = 20; // dial shows 0–20 minutes
 
 function drawDial(ms) {
   ctx.clearRect(0, 0, 290, 290);
@@ -343,11 +345,11 @@ function drawDial(ms) {
   drawMinuteTicks();
   drawSecondTicks();
 
-  // Minute hand (big)
-  const minAngle = (totalMin % 60) / 60 * Math.PI * 2;
+  // Minute hand — full sweep = SCALE minutes
+  const minAngle = (totalMin % SCALE) / SCALE * Math.PI * 2;
   drawHand(minAngle, R * 0.62, 9, '#1a0e04');
 
-  // Second hand (small, red)
+  // Second hand
   const secAngle = (totalSec % 60) / 60 * Math.PI * 2;
   drawSecondHand(secAngle);
 
@@ -361,8 +363,10 @@ function drawDial(ms) {
 }
 
 function drawLimitMarker(min) {
-  const angle = (min / 60) * Math.PI * 2 - Math.PI / 2;
-  const arcSpan = (1.5 / 60) * Math.PI * 2;
+  // clamp to scale
+  const clamped = Math.min(min, SCALE);
+  const angle = (clamped / SCALE) * Math.PI * 2 - Math.PI / 2;
+  const arcSpan = (0.5 / SCALE) * Math.PI * 2;
 
   ctx.beginPath();
   ctx.arc(CX, CY, R - 5, angle - arcSpan / 2, angle + arcSpan / 2);
@@ -378,33 +382,34 @@ function drawLimitMarker(min) {
 }
 
 function drawMinuteTicks() {
-  for (let i = 0; i < 60; i++) {
-    const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
-    const isMajor = i % 5 === 0;
-    const isQuarter = i % 15 === 0;
-    const len = isQuarter ? 18 : (isMajor ? 13 : 7);
+  // SCALE major ticks (one per minute), 4 sub-ticks between each (every 15s)
+  const totalTicks = SCALE * 4;
+  for (let i = 0; i < totalTicks; i++) {
+    const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
+    const isMin = i % 4 === 0;          // every minute
+    const isFive = i % 20 === 0;        // every 5 minutes
+    const len = isFive ? 20 : (isMin ? 14 : 7);
+    const lw  = isFive ? 3  : (isMin ? 2  : 1);
+    const col = isMin  ? '#3a2510' : '#9a8050';
 
     const x1 = CX + Math.cos(angle) * (R - 2);
     const y1 = CY + Math.sin(angle) * (R - 2);
     const x2 = CX + Math.cos(angle) * (R - 2 - len);
     const y2 = CY + Math.sin(angle) * (R - 2 - len);
 
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = isMajor ? '#3a2510' : '#9a8050';
-    ctx.lineWidth = isQuarter ? 3 : (isMajor ? 2 : 1);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke();
 
-    if (isMajor) {
+    if (isMin) {
+      const minLabel = i / 4;
       const tr = R - 2 - len - 13;
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
       ctx.fillStyle = '#2a1808';
-      ctx.font = `bold ${isQuarter ? 18 : 15}px Georgia`;
+      ctx.font = `bold ${isFive ? 18 : 13}px Georgia`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(i), tx, ty);
+      ctx.fillText(String(minLabel), tx, ty);
     }
   }
 }
