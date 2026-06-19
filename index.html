@@ -277,7 +277,7 @@
     <button class="btn btn-start" id="btnStart">Start</button>
   </div>
 
-  <input id="limitInput" type="hidden" value="3" />
+  <input id="limitInput" type="hidden" value="2" />
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
 </div>
 
@@ -290,7 +290,7 @@ let startTime = null;
 let elapsed = 0;
 let running = false;
 let animFrame = null;
-let limitMin = 3;
+let limitMin = 2;
 
 document.getElementById('limitInput').addEventListener('input', function() {
   const v = parseInt(this.value);
