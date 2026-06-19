@@ -307,7 +307,7 @@
 <div class="watch-container">
   <h1 class="page-title" id="pageTitle">Alicia &amp; Alice Timepiece</h1>
   <p class="page-subtitle" id="tagline"></p>
-  <div class="watch-outer">
+  <div id="stopwatchWatch" class="watch-outer">
     <button class="btn-top" id="btnSideReset" title="Reset"></button>
     <div class="side-buttons">
       <button class="btn-side" id="btnSideStart" title="Start/Stop"></button>
@@ -320,21 +320,22 @@
     </div>
   </div>
 
-  <div class="scale-links">
-    <a href="#6"  class="scale-link" data-scale="6">6 min</a>
-    <a href="#12" class="scale-link" data-scale="12">12 min</a>
-    <a href="#60" class="scale-link" data-scale="60">60 min</a>
-  </div>
-
-  <input id="limitInput" type="hidden" value="2" />
-
-  <div class="clock-watch-outer">
+  <div id="clockWatch" class="clock-watch-outer" style="display:none">
     <div class="clock-bezel">
       <div class="clock-face">
         <canvas id="clockCanvas" width="176" height="176"></canvas>
       </div>
     </div>
   </div>
+
+  <div class="scale-links">
+    <a href="#6"  class="scale-link" data-scale="6">6 min</a>
+    <a href="#12" class="scale-link" data-scale="12">12 min</a>
+    <a href="#60" class="scale-link" data-scale="60">60 min</a>
+    <a href="#clock" class="scale-link" id="clockLink">clock</a>
+  </div>
+
+  <input id="limitInput" type="hidden" value="2" />
 
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
 </div>
@@ -358,6 +359,19 @@ const SCALE_CONFIG = {
 
 let SCALE = 6;
 
+function showStopwatch() {
+  document.getElementById('stopwatchWatch').style.display = '';
+  document.getElementById('clockWatch').style.display = 'none';
+}
+
+function showClock() {
+  document.getElementById('stopwatchWatch').style.display = 'none';
+  document.getElementById('clockWatch').style.display = '';
+  document.querySelectorAll('.scale-link').forEach(el => el.classList.remove('active'));
+  document.getElementById('clockLink').classList.add('active');
+  history.replaceState(null, '', '#clock');
+}
+
 function applyScale(s) {
   SCALE = s;
   const cfg = SCALE_CONFIG[s];
@@ -366,15 +380,21 @@ function applyScale(s) {
   document.querySelectorAll('.scale-link').forEach(el => {
     el.classList.toggle('active', parseInt(el.dataset.scale) === s);
   });
+  showStopwatch();
   reset();
 }
 
-document.querySelectorAll('.scale-link').forEach(el => {
+document.querySelectorAll('.scale-link[data-scale]').forEach(el => {
   el.addEventListener('click', e => {
     e.preventDefault();
     applyScale(parseInt(el.dataset.scale));
     history.replaceState(null, '', el.getAttribute('href'));
   });
+});
+
+document.getElementById('clockLink').addEventListener('click', e => {
+  e.preventDefault();
+  showClock();
 });
 
 document.getElementById('limitInput').addEventListener('input', function() {
@@ -673,9 +693,16 @@ if (document.referrer.includes('minodiaire')) {
   document.getElementById('pageTitle').textContent = "ALICIA'S TIMEPIECE";
   document.title = "ALICIA'S TIMEPIECE";
 }
-const hashScale = parseInt(window.location.hash.replace('#', ''));
-applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
-tick();
+const hashVal = window.location.hash.replace('#', '');
+if (hashVal === 'clock') {
+  applyScale(6);
+  tick();
+  showClock();
+} else {
+  const hashScale = parseInt(hashVal);
+  applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
+  tick();
+}
 
 // --- Analog clock ---
 const clockCanvas = document.getElementById('clockCanvas');
