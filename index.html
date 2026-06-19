@@ -715,7 +715,7 @@ function drawClock() {
   const now = new Date();
   const timeStr = now.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour12: false });
   const [h, m, s] = timeStr.split(':').map(Number);
-  document.getElementById('clockDisplay').textContent = timeStr;
+  document.getElementById('clockDisplay').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
   const hr  = h % 12 + m / 60;
   const min = m + s / 60;
   const sec = s + now.getMilliseconds() / 1000;
