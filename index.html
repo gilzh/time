@@ -359,9 +359,9 @@ function drawMinuteTicks() {
   for (let i = 0; i < totalTicks; i++) {
     const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
     const isMin = i % 4 === 0;          // every minute
-    const isFive = i % 20 === 0;        // every 5 minutes
-    const len = isFive ? 20 : (isMin ? 14 : 7);
-    const lw  = isFive ? 3  : (isMin ? 2  : 1);
+    const isThree = i % 12 === 0;       // every 3 minutes
+    const len = isThree ? 20 : (isMin ? 14 : 7);
+    const lw  = isThree ? 3  : (isMin ? 2  : 1);
     const col = isMin  ? '#3a2510' : '#9a8050';
 
     const x1 = CX + Math.cos(angle) * (R - 2);
@@ -378,7 +378,7 @@ function drawMinuteTicks() {
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
       ctx.fillStyle = '#2a1808';
-      ctx.font = `bold ${isFive ? 18 : 13}px Georgia`;
+      ctx.font = `bold ${isThree ? 18 : 13}px Georgia`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(String(minLabel), tx, ty);
