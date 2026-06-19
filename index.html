@@ -504,6 +504,7 @@ function reset() {
   document.getElementById('btnStart').textContent = 'Start';
   drawDial(0);
   document.getElementById('digitalDisplay').textContent = '00:00';
+  document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
 document.getElementById('btnStart').addEventListener('click', startStop);
