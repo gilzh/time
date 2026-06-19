@@ -601,10 +601,9 @@ const quotes = [
   "set goals, don't waste your time",
 ];
 
-const path = window.location.pathname;
-if (path.includes('minodiaire')) {
-  document.getElementById('pageTitle').textContent = 'Alicia Timepiece';
-  document.title = 'Alicia Timepiece';
+if (document.referrer.includes('minodiaire')) {
+  document.getElementById('pageTitle').textContent = "ALICIA'S TIMEPIECE";
+  document.title = "ALICIA'S TIMEPIECE";
 }
 const hashScale = parseInt(window.location.hash.replace('#', ''));
 applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
