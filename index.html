@@ -291,7 +291,6 @@
     <div class="watch-bezel">
       <div class="watch-face">
         <canvas id="dialCanvas" width="270" height="270"></canvas>
-        <div class="brand">Tempus &middot; Co.</div>
         <div class="digital-display" id="digitalDisplay">00:00</div>
       </div>
     </div>
@@ -367,6 +366,16 @@ function drawDial(ms) {
 
   const totalMin = ms / 60000;
   const totalSec = ms / 1000;
+
+  // Background scale number
+  ctx.save();
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = '#3a2510';
+  ctx.font = 'bold 180px Georgia';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(String(SCALE), CX, CY);
+  ctx.restore();
 
   if (limitMin !== null) drawLimitMarker(limitMin);
 
