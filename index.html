@@ -87,7 +87,7 @@
   /* Side Reset button */
   .side-buttons {
     position: absolute;
-    right: -30px;
+    right: -22px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -106,8 +106,8 @@
   /* Outer case */
   .watch-outer {
     position: relative;
-    width: 360px;
-    height: 360px;
+    width: 336px;
+    height: 336px;
     border-radius: 50%;
     background: linear-gradient(145deg, #d4aa50 0%, #8b6914 30%, #c8a030 55%, #7a5c10 75%, #b8922e 100%);
     box-shadow:
@@ -132,8 +132,8 @@
   /* Inner bezel */
   .watch-bezel {
     position: relative;
-    width: 314px;
-    height: 314px;
+    width: 292px;
+    height: 292px;
     border-radius: 50%;
     background: linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #0e0804 100%);
     box-shadow:
@@ -149,8 +149,8 @@
   /* Dial face */
   .watch-face {
     position: relative;
-    width: 290px;
-    height: 290px;
+    width: 270px;
+    height: 270px;
     border-radius: 50%;
     background:
       radial-gradient(ellipse at 40% 35%, rgba(255,245,220,0.08) 0%, transparent 60%),
@@ -289,7 +289,7 @@
     </div>
     <div class="watch-bezel">
       <div class="watch-face">
-        <canvas id="dialCanvas" width="290" height="290"></canvas>
+        <canvas id="dialCanvas" width="270" height="270"></canvas>
         <div class="brand">Tempus &middot; Co.</div>
         <div class="digital-display" id="digitalDisplay">00:00</div>
       </div>
@@ -312,7 +312,7 @@
 <script>
 const canvas = document.getElementById('dialCanvas');
 const ctx = canvas.getContext('2d');
-const CX = 145, CY = 145, R = 133;
+const CX = 135, CY = 135, R = 124;
 
 let startTime = null;
 let elapsed = 0;
@@ -335,7 +335,7 @@ function formatTime(ms) {
 const SCALE = 10; // dial shows 0–20 minutes
 
 function drawDial(ms) {
-  ctx.clearRect(0, 0, 290, 290);
+  ctx.clearRect(0, 0, 270, 270);
 
   const totalMin = ms / 60000;
   const totalSec = ms / 1000;
