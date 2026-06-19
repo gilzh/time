@@ -517,6 +517,32 @@ document.getElementById('btnReset').addEventListener('click', reset);
 document.getElementById('btnSideStart').addEventListener('click', startStop);
 document.getElementById('btnSideReset').addEventListener('click', reset);
 
+// Tap a minute mark on the dial to set Target
+function handleDialTap(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const x = (clientX - rect.left) * (canvas.width / rect.width) - CX;
+  const y = (clientY - rect.top)  * (canvas.height / rect.height) - CY;
+  const dist = Math.sqrt(x * x + y * y);
+
+  // Only respond to taps in the outer minute-ring area
+  if (dist < R * 0.55 || dist > R) return;
+
+  // Convert tap position to angle, then to minutes
+  let angle = Math.atan2(y, x) + Math.PI / 2;
+  if (angle < 0) angle += Math.PI * 2;
+  const min = Math.round(angle / (Math.PI * 2) * SCALE);
+  const clamped = Math.max(1, Math.min(SCALE, min === 0 ? SCALE : min));
+
+  limitMin = clamped;
+  document.getElementById('limitInput').value = clamped;
+  drawDial(elapsed);
+}
+
+canvas.addEventListener('click', handleDialTap);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); handleDialTap(e); }, { passive: false });
+
 tick();
 
 const quotes = [
