@@ -280,7 +280,7 @@
 
 <div class="watch-container">
   <h1 class="page-title">Alicia &amp; Alice Timepiece</h1>
-  <p class="page-subtitle">forward motion is sexy</p>
+  <p class="page-subtitle" id="tagline"></p>
   <div class="watch-outer">
     <button class="btn-top" id="btnSideReset" title="Reset"></button>
     <div class="side-buttons">
@@ -511,6 +511,31 @@ document.getElementById('btnSideStart').addEventListener('click', startStop);
 document.getElementById('btnSideReset').addEventListener('click', reset);
 
 tick();
+
+const quotes = [
+  "forward motion is sexy",
+  "you don't want to send your CV",
+  "employers don't want to publish their open roles",
+  "you are a STAR",
+  "once you can clearly articulate what you want, people will want to help you",
+  "can you suggest anybody else I should talk to?",
+  "Vielen dank, Frau Schweiger",
+  "I help organizations solve X",
+  "I am a solutions provider, not a candidate",
+  "ATS are shit",
+  "all lists are forgettable",
+  "the goal is not perfection; the goal is to get comfortable with our imperfections",
+  "put on your shoes",
+  "do not read",
+  "feedback is a gift 🙏",
+  "60% of Job Ads are fake",
+  "feedback golden ratio: 60% positive / 40% constructive",
+  "feedback golden rule: start with your observations. always. immer. toujours",
+  "is this role right for me?",
+  "be picky, create leverage",
+  "set goals, don't waste your time",
+];
+document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 </script>
 </body>
 </html>
