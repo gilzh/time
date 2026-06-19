@@ -324,6 +324,7 @@
     <div class="clock-bezel">
       <div class="clock-face">
         <canvas id="clockCanvas" width="176" height="176"></canvas>
+        <div class="digital-display" id="clockDisplay" style="font-size:18px;bottom:44px;letter-spacing:2px;">00:00:00</div>
       </div>
     </div>
   </div>
@@ -712,7 +713,9 @@ const CCX = 88, CCY = 88, CR = 80;
 function drawClock() {
   cc.clearRect(0, 0, 176, 176);
   const now = new Date();
-  const [h, m, s] = now.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour12: false }).split(':').map(Number);
+  const timeStr = now.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour12: false });
+  const [h, m, s] = timeStr.split(':').map(Number);
+  document.getElementById('clockDisplay').textContent = timeStr;
   const hr  = h % 12 + m / 60;
   const min = m + s / 60;
   const sec = s + now.getMilliseconds() / 1000;
