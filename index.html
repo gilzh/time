@@ -46,7 +46,7 @@
   .page-subtitle {
     color: #8b6914;
     font-family: 'Georgia', serif;
-    font-size: 14px;
+    font-size: 18px;
     font-style: italic;
     letter-spacing: 1px;
     text-align: center;
@@ -344,7 +344,7 @@ function drawDial(ms) {
 
   // Minute hand (big)
   const minAngle = (totalMin % 60) / 60 * Math.PI * 2;
-  drawHand(minAngle, R * 0.62, 5, '#2d1a08');
+  drawHand(minAngle, R * 0.62, 9, '#1a0e04');
 
   // Second hand (small, red)
   const secAngle = (totalSec % 60) / 60 * Math.PI * 2;
