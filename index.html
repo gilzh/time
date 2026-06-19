@@ -242,6 +242,22 @@
   }
   .btn-reset:active { transform: translateY(2px); }
 
+  .scale-links {
+    display: flex;
+    gap: 24px;
+  }
+  .scale-link {
+    color: #5a4010;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.15s, color 0.15s;
+  }
+  .scale-link:hover { opacity: 1; color: #8b6914; }
+  .scale-link.active { color: #c8a96e; opacity: 1; }
+
   .footer-link {
     color: #5a4010;
     font-family: 'Georgia', serif;
@@ -277,6 +293,12 @@
     <button class="btn btn-start" id="btnStart">Start</button>
   </div>
 
+  <div class="scale-links">
+    <a href="#6"  class="scale-link" data-scale="6">6 min</a>
+    <a href="#12" class="scale-link" data-scale="12">12 min</a>
+    <a href="#60" class="scale-link" data-scale="60">60 min</a>
+  </div>
+
   <input id="limitInput" type="hidden" value="2" />
   <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
 </div>
@@ -292,9 +314,36 @@ let running = false;
 let animFrame = null;
 let limitMin = 2;
 
+const SCALE_CONFIG = {
+  6:  { boldEveryMin: 3,  defaultTarget: 2  },
+  12: { boldEveryMin: 3,  defaultTarget: 3  },
+  60: { boldEveryMin: 15, defaultTarget: 15 },
+};
+
+let SCALE = 6;
+
+function applyScale(s) {
+  SCALE = s;
+  const cfg = SCALE_CONFIG[s];
+  limitMin = cfg.defaultTarget;
+  document.getElementById('limitInput').value = cfg.defaultTarget;
+  document.querySelectorAll('.scale-link').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.scale) === s);
+  });
+  reset();
+}
+
+document.querySelectorAll('.scale-link').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    applyScale(parseInt(el.dataset.scale));
+    history.replaceState(null, '', el.getAttribute('href'));
+  });
+});
+
 document.getElementById('limitInput').addEventListener('input', function() {
   const v = parseInt(this.value);
-  limitMin = (v >= 1 && v <= 6) ? v : null;
+  limitMin = (v >= 1 && v <= SCALE) ? v : null;
   drawDial(elapsed);
 });
 
@@ -303,8 +352,6 @@ function formatTime(ms) {
   const m = Math.floor(ms / 60000);
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
-
-const SCALE = 6; // dial shows 0–20 minutes
 
 function drawDial(ms) {
   ctx.clearRect(0, 0, 270, 270);
@@ -354,15 +401,14 @@ function drawLimitMarker(min) {
 }
 
 function drawMinuteTicks() {
-  // SCALE major ticks (one per minute), 4 sub-ticks between each (every 15s)
   const totalTicks = SCALE * 4;
+  const boldEveryTicks = SCALE_CONFIG[SCALE].boldEveryMin * 4;
   for (let i = 0; i < totalTicks; i++) {
     const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
-    const isMin = i % 4 === 0;          // every minute
-    const isThree = i % 12 === 0;       // every 3 minutes
-    const len = isThree ? 20 : (isMin ? 14 : 7);
-    const lw  = isThree ? 3  : (isMin ? 2  : 1);
-    const col = isMin  ? '#3a2510' : '#9a8050';
+    const isMin  = i % 4 === 0;
+    const isBold = i % boldEveryTicks === 0;
+    const len = isBold ? 20 : (isMin ? 14 : 7);
+    const lw  = isBold ? 3  : (isMin ? 2  : 1);
 
     const x1 = CX + Math.cos(angle) * (R - 2);
     const y1 = CY + Math.sin(angle) * (R - 2);
@@ -370,7 +416,8 @@ function drawMinuteTicks() {
     const y2 = CY + Math.sin(angle) * (R - 2 - len);
 
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
-    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke();
+    ctx.strokeStyle = isMin ? '#3a2510' : '#9a8050';
+    ctx.lineWidth = lw; ctx.stroke();
 
     if (isMin) {
       const minLabel = i / 4;
@@ -378,7 +425,7 @@ function drawMinuteTicks() {
       const tx = CX + Math.cos(angle) * tr;
       const ty = CY + Math.sin(angle) * tr;
       ctx.fillStyle = '#2a1808';
-      ctx.font = `bold ${isThree ? 18 : 13}px Georgia`;
+      ctx.font = `bold ${isBold ? 18 : 13}px Georgia`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(String(minLabel), tx, ty);
@@ -515,8 +562,6 @@ function handleDialTap(e) {
 canvas.addEventListener('click', handleDialTap);
 canvas.addEventListener('touchstart', e => { e.preventDefault(); handleDialTap(e); }, { passive: false });
 
-tick();
-
 const quotes = [
   "forward motion is sexy",
   "you don't want to send your CV",
@@ -540,7 +585,10 @@ const quotes = [
   "be picky, create leverage",
   "set goals, don't waste your time",
 ];
-document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+const hashScale = parseInt(window.location.hash.replace('#', ''));
+applyScale(SCALE_CONFIG[hashScale] ? hashScale : 6);
+tick();
 </script>
 </body>
 </html>
