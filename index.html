@@ -432,11 +432,11 @@ function drawDial(ms) {
   drawSecondTicks();
 
   // Minute hand — full sweep = SCALE minutes
-  const minAngle = (totalMin % SCALE) / SCALE * Math.PI * 2;
+  const minAngle = (totalMin % SCALE) / SCALE * Math.PI * 2 - Math.PI / 2;
   drawHand(minAngle, R * 0.62, 9, '#1a0e04');
 
   // Second hand
-  const secAngle = (totalSec % 60) / 60 * Math.PI * 2;
+  const secAngle = (totalSec % 60) / 60 * Math.PI * 2 - Math.PI / 2;
   drawSecondHand(secAngle);
 
   // Center jewel
@@ -451,7 +451,7 @@ function drawDial(ms) {
 function drawLimitMarker(min) {
   // clamp to scale
   const clamped = Math.min(min, SCALE);
-  const angle = (clamped / SCALE) * Math.PI * 2;
+  const angle = (clamped / SCALE) * Math.PI * 2 - Math.PI / 2;
   const arcSpan = (0.5 / SCALE) * Math.PI * 2;
 
   ctx.beginPath();
@@ -473,7 +473,7 @@ function drawMinuteTicks() {
   const boldEveryTicks  = cfg.boldEveryMin  * cfg.subTicks;
   const labelEveryTicks = cfg.labelEveryMin * cfg.subTicks;
   for (let i = 0; i < totalTicks; i++) {
-    const angle = (i / totalTicks) * Math.PI * 2;
+    const angle = (i / totalTicks) * Math.PI * 2 - Math.PI / 2;
     const isMin   = i % cfg.subTicks === 0;
     const isBold  = i % boldEveryTicks  === 0;
     const isLabel = i % labelEveryTicks === 0;
@@ -507,7 +507,7 @@ function drawSecondTicks() {
   const rOuter = R * 0.50;
   const rInner = R * 0.43;
   for (let i = 0; i < 60; i++) {
-    const angle = (i / 60) * Math.PI * 2;
+    const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
     const isMajor = i % 5 === 0;
     const r1 = isMajor ? rOuter : rOuter - 2;
     const r2 = isMajor ? rInner - 2 : rInner + 1;
@@ -722,7 +722,7 @@ function drawClock() {
 
   // Hour ticks & numbers
   for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2;
+    const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
     const bold = true;
     const len = 14;
     cc.beginPath();
@@ -738,7 +738,7 @@ function drawClock() {
   // Minute ticks
   for (let i = 0; i < 60; i++) {
     if (i % 5 === 0) continue;
-    const a = (i / 60) * Math.PI * 2;
+    const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
     cc.beginPath();
     cc.moveTo(CCX + Math.cos(a) * (CR - 2), CCY + Math.sin(a) * (CR - 2));
     cc.lineTo(CCX + Math.cos(a) * (CR - 9), CCY + Math.sin(a) * (CR - 9));
