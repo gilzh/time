@@ -1,0 +1,4 @@
+#!/bin/sh
+ver=$(date '+%Y%m%d %H:%M')
+sed -i "s/version [0-9]\{8\} [0-9]\{2\}:[0-9]\{2\}/version $ver/" index.html
+git add index.html
