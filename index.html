@@ -244,8 +244,8 @@
 
   .clock-watch-outer {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 336px;
+    height: 336px;
     border-radius: 50%;
     background: linear-gradient(145deg, #d4aa50 0%, #8b6914 30%, #c8a030 55%, #7a5c10 75%, #b8922e 100%);
     box-shadow:
@@ -268,8 +268,8 @@
   }
   .clock-bezel {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 308px;
+    height: 308px;
     border-radius: 50%;
     background: linear-gradient(135deg, #1a1008 0%, #2d1f0e 50%, #0e0804 100%);
     box-shadow:
@@ -283,8 +283,8 @@
   }
   .clock-face {
     position: relative;
-    width: 176px;
-    height: 176px;
+    width: 270px;
+    height: 270px;
     border-radius: 50%;
     background:
       radial-gradient(ellipse at 40% 35%, rgba(255,245,220,0.08) 0%, transparent 60%),
@@ -323,7 +323,7 @@
   <div id="clockWatch" class="clock-watch-outer" style="display:none">
     <div class="clock-bezel">
       <div class="clock-face">
-        <canvas id="clockCanvas" width="176" height="176"></canvas>
+        <canvas id="clockCanvas" width="270" height="270"></canvas>
         <div class="digital-display" id="clockDisplay" style="font-size:18px;bottom:44px;letter-spacing:2px;">00:00:00</div>
       </div>
     </div>
@@ -743,10 +743,10 @@ if (hashVal === 'clock') {
 // --- Analog clock ---
 const clockCanvas = document.getElementById('clockCanvas');
 const cc = clockCanvas.getContext('2d');
-const CCX = 88, CCY = 88, CR = 80;
+const CCX = 135, CCY = 135, CR = 124;
 
 function drawClock() {
-  cc.clearRect(0, 0, 176, 176);
+  cc.clearRect(0, 0, 270, 270);
   const now = new Date();
   const timeStr = now.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour12: false });
   const [h, m, s] = timeStr.split(':').map(Number);
