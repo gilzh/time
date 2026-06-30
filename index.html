@@ -669,10 +669,9 @@ document.getElementById('btnSideStart').addEventListener('click', () => { playCl
 document.getElementById('btnSideReset').addEventListener('click', () => { playClick('reset'); reset(); });
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && e.target === document.body) {
-    e.preventDefault();
-    playClick('start'); startStop();
-  }
+  if (e.target !== document.body) return;
+  if (e.code === 'Space') { e.preventDefault(); playClick('start'); startStop(); }
+  if (e.code === 'Escape') { playClick('reset'); reset(); }
 });
 
 // Tap a minute mark on the dial to set Target
