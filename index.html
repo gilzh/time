@@ -571,9 +571,15 @@ function drawSecondHand(angle) {
   ctx.restore();
 }
 
+let sharedAC = null;
+function getAC() {
+  if (!sharedAC) sharedAC = new (window.AudioContext || window.webkitAudioContext)();
+  if (sharedAC.state === 'suspended') sharedAC.resume();
+  return sharedAC;
+}
+
 function playBell() {
-  const ac = new (window.AudioContext || window.webkitAudioContext)();
-  // Fundamental + harmonics for a warm bell tone
+  const ac = getAC();
   [[1, 0.6], [2.76, 0.25], [5.4, 0.1], [8.93, 0.05]].forEach(([ratio, gain]) => {
     const osc = ac.createOscillator();
     const g = ac.createGain();
@@ -621,7 +627,7 @@ function reset() {
 }
 
 function playClick(type) {
-  const ac = new (window.AudioContext || window.webkitAudioContext)();
+  const ac = getAC();
   if (type === 'reset') {
     // Two-stage thunk: initial transient + low body
     [0, 0.045].forEach((delay, i) => {
