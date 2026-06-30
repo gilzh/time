@@ -668,6 +668,13 @@ function playClick(type) {
 document.getElementById('btnSideStart').addEventListener('click', () => { playClick('start'); startStop(); });
 document.getElementById('btnSideReset').addEventListener('click', () => { playClick('reset'); reset(); });
 
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && e.target === document.body) {
+    e.preventDefault();
+    playClick('start'); startStop();
+  }
+});
+
 // Tap a minute mark on the dial to set Target
 function handleDialTap(e) {
   const rect = canvas.getBoundingClientRect();
