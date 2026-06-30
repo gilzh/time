@@ -571,10 +571,31 @@ function drawSecondHand(angle) {
   ctx.restore();
 }
 
+function playBell() {
+  const ac = new (window.AudioContext || window.webkitAudioContext)();
+  // Fundamental + harmonics for a warm bell tone
+  [[1, 0.6], [2.76, 0.25], [5.4, 0.1], [8.93, 0.05]].forEach(([ratio, gain]) => {
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.frequency.value = 520 * ratio;
+    osc.type = 'sine';
+    g.gain.setValueAtTime(gain, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 2.8);
+    osc.connect(g); g.connect(ac.destination);
+    osc.start(); osc.stop(ac.currentTime + 2.8);
+  });
+}
+
+let bellRung = false;
+
 function tick() {
   if (running) elapsed = Date.now() - startTime;
   drawDial(elapsed);
   document.getElementById('digitalDisplay').textContent = formatTime(elapsed);
+  if (running && limitMin !== null && !bellRung && elapsed >= limitMin * 60000) {
+    playBell();
+    bellRung = true;
+  }
   animFrame = requestAnimationFrame(tick);
 }
 
@@ -593,6 +614,7 @@ function reset() {
   running = false;
   elapsed = 0;
   startTime = null;
+  bellRung = false;
   drawDial(0);
   document.getElementById('digitalDisplay').textContent = '00:00';
   document.getElementById('tagline').textContent = quotes[Math.floor(Math.random() * quotes.length)];
@@ -659,6 +681,7 @@ function handleDialTap(e) {
   const clamped = Math.max(1, Math.min(SCALE, min === 0 ? SCALE : min));
 
   limitMin = clamped;
+  bellRung = elapsed >= limitMin * 60000;
   document.getElementById('limitInput').value = clamped;
   drawDial(elapsed);
 }
