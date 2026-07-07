@@ -340,7 +340,7 @@
 
   <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
     <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
-    <span id="version-timestamp" style="color:#5a4010;font-family:'Georgia',serif;font-size:13px;letter-spacing:2px;opacity:0.7;cursor:default">v 7 Jul 08:19</span>
+    <span id="version-timestamp" style="color:#5a4010;font-family:'Georgia',serif;font-size:13px;letter-spacing:2px;opacity:0.7;cursor:default">v 7 Jul 08:22</span>
   </div>
 </div>
 
@@ -769,9 +769,10 @@ function drawClock() {
     cc.moveTo(CCX + Math.cos(a) * (CR - 2), CCY + Math.sin(a) * (CR - 2));
     cc.lineTo(CCX + Math.cos(a) * (CR - 2 - len), CCY + Math.sin(a) * (CR - 2 - len));
     cc.strokeStyle = '#3a2510'; cc.lineWidth = 2.5; cc.stroke();
-    const tr = CR - 2 - len - 9;
-    cc.fillStyle = '#2a1808';
-    cc.font = 'bold 11px Georgia';
+    const cardinal = (i % 3 === 0);
+    const tr = CR - 2 - len - (cardinal ? 12 : 9);
+    cc.fillStyle = cardinal ? '#1a0e04' : '#2a1808';
+    cc.font = `bold ${cardinal ? 18 : 11}px Georgia`;
     cc.textAlign = 'center'; cc.textBaseline = 'middle';
     cc.fillText(String(i === 0 ? 12 : i), CCX + Math.cos(a) * tr, CCY + Math.sin(a) * tr);
   }
