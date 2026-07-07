@@ -340,7 +340,7 @@
 
   <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
     <a class="footer-link" href="https://gilzh.github.io" target="_blank">gilzh.github.io</a>
-    <span id="version-timestamp" style="color:#5a4010;font-family:'Georgia',serif;font-size:13px;letter-spacing:2px;opacity:0.7;cursor:default">v 7 Jul 08:22</span>
+    <span id="version-timestamp" style="color:#5a4010;font-family:'Georgia',serif;font-size:13px;letter-spacing:2px;opacity:0.7;cursor:default">v 7 Jul 08:26</span>
   </div>
 </div>
 
@@ -731,7 +731,7 @@ const quotes = [
 ];
 
 if (document.referrer.includes('minodiaire')) {
-  document.getElementById('pageTitle').textContent = "Minodiaire is for ever";
+  document.getElementById('pageTitle').innerHTML = "Minodiaire<br>is for ever";
   document.title = "Minodiaire is for ever";
 }
 const hashVal = window.location.hash.replace('#', '');
